@@ -14,11 +14,11 @@ package main
 import (
 	"fmt"
 
-    "github.com/r-nakamura/go-graphtools"
+	g "github.com/r-nakamura/go-graphtools"
 )
 
 func main() {
-	var g DirectedGraph
+	var g g.DirectedGraph
 	g.New()
 	g.CreateRandomGraph(10, 20)
 	fmt.Println(g.ExportDot())
