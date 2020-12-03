@@ -460,8 +460,8 @@ func (g *Graph) Dijkstra(s int) (map[int]float64, map[int][]int) {
 
 		for _, v := range g.Successors(u) {
 			var w, d float64
-			if g.EdgeWeightByID(u, v, 0) != nil {
-				w = g.EdgeWeightByID(u, v, 0).(float64)
+			if ww := g.EdgeWeightByID(u, v, 0); ww != nil {
+				w = ww.(float64)
 			} else {
 				w = 1
 			}
