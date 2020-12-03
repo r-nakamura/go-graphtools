@@ -61,7 +61,7 @@ type DirectedGraph struct {
 
 func (g *DirectedGraph) New() {
 	g.Graph.New()
-	g.directed = true
+	g.SetDirected()
 }
 
 type UndirectedGraph struct {
@@ -70,10 +70,14 @@ type UndirectedGraph struct {
 
 func (g *UndirectedGraph) New() {
 	g.Graph.New()
-	g.directed = false
+	g.SetUndirected()
 }
 
+func (g *Graph) SetDirected() { g.directed = true }
+
 func (g *Graph) Directed() bool { return g.directed }
+
+func (g *Graph) SetUndirected() { g.directed = false }
 
 func (g *Graph) Undirected() bool { return !g.directed }
 
