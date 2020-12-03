@@ -377,6 +377,35 @@ func TestShortestPaths(t *testing.T) {
 	}
 }
 
+func TestFloydWarshall(t *testing.T) {
+	var g DirectedGraph
+	g.New()
+	g.AddEdge(1, 2)
+	g.AddEdge(2, 3)
+	g.AddEdge(1, 3)
+	g.AddEdge(3, 4)
+
+	g.FloydWarshall()
+
+	got := g.T
+	expected := map[int]map[int]float64{
+		1: map[int]float64{
+			2: 1, 3: 1, 4: 2,
+		},
+		2: map[int]float64{
+			3: 1, 4: 2,
+		},
+		3: map[int]float64{
+			4: 1,
+		},
+		4: map[int]float64{
+		},
+	}
+	if !reflect.DeepEqual(got, expected) {
+		t.Errorf("got: %v, expected: %v", got, expected)
+	}
+}
+
 func TestIsReachable(t *testing.T) {
 	var g DirectedGraph
 	g.New()

@@ -536,6 +536,39 @@ func (g *Graph) DijkstraAllPairs() {
 }
 
 func (g *Graph) FloydWarshall() {
+	g.ExpectDirected()
+
+	path := make(map[int]map[int]float64)
+	for _, v := range g.Vertices() {
+		path[v] = make(map[int]float64)
+	}
+	for _, e := range g.Edges() {
+		u, v := e[0], e[1]
+		if w := g.EdgeWeightByID(u, v, 0); w != nil {
+			path[u][v] = w.(float64)
+		} else {
+			path[u][v] = 1
+		}
+	}
+
+	get := func(path map[int]map[int]float64, u int, v int) float64 {
+		if _, ok := path[u][v]; ok {
+			return path[u][v]
+		} else {
+			return INFINITY
+		}
+	}
+	for _, k := range g.Vertices() {
+		for _, u := range g.Vertices() {
+			for _, v := range g.Vertices() {
+				if get(path, u, k) + get(path, k, v) < get(path, u, v) {
+					path[u][v] = path[u][k] + path[k][v]
+				}
+			}
+		}
+	}
+
+	g.T = path
 }
 
 func (g *Graph) IsReachable(u, v int) bool {
