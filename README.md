@@ -11,14 +11,15 @@ Python language.
 
 ```go
 package main
+
 import (
 	"fmt"
 
-	g "github.com/r-nakamura/go-graphtools"
+	. "github.com/r-nakamura/go-graphtools"
 )
 
 func main() {
-	var g g.DirectedGraph
+	var g DirectedGraph
 	g.New()
 	g.CreateRandomGraph(10, 20)
 	fmt.Println(g.ExportDot())
