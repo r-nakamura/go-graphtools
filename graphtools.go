@@ -52,6 +52,7 @@ func (g *Graph) New() {
 	g.T = make(map[int]map[int]float64)
 	g.P = make(map[int]map[int][]int)
 	g.Cb = make(map[int]float64)
+	g.attr = make(Attribute)
 }
 
 type DirectedGraph struct {

@@ -20,6 +20,19 @@ func sortEdges(E *[][2]int) {
 	})
 }
 
+func TestGraphAttribute(t *testing.T) {
+	var g Graph
+	g.New()
+	val := 1
+	g.SetGraphAttribute("key", val)
+
+	got := g.GraphAttribute("key")
+	expected := val
+	if !reflect.DeepEqual(got, expected) {
+		t.Errorf("got: %v, expected: %v", got, expected)
+	}
+}
+
 func TestVertices(t *testing.T) {
 	var g DirectedGraph
 	g.New()
