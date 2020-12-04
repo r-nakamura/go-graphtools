@@ -996,6 +996,36 @@ func (g *Graph) CreateVoronoiGraph() {
 }
 
 func (g *Graph) CreateDegreeBoundedGraph(N, E int) {
+	g.ExpectUndirected()
+	k := 2 * float64(E) / float64(N)
+	kmin := int(k / 2)
+	if k != float64(kmin * 2) {
+		die(fmt.Sprintf("Average degree %v must be multiple of 2", k))
+	}
+
+	for v := 1; v < N+1; v++ {
+		g.AddVertex(v)
+	}
+
+	randomChoice := func (m map[int]bool) int {
+		var V []int
+		for v, _ := range m {
+			V = append(V, v)
+		}
+		return V[rand.Intn(len(V))]
+	}
+	for _, u := range g.Vertices() {
+		V := make(map[int]bool)
+		for _, v := range g.Vertices() {
+			V[v] = true
+		}
+		delete(V, u)
+		for i := 0; i < kmin; i++ {
+			v := randomChoice(V)
+			g.AddEdge(u, v)
+			delete(V, v)
+		}
+	}
 }
 
 func (g *Graph) CreateConfigurationGraph(degreeSeq []int) {
