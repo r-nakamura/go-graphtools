@@ -1143,6 +1143,17 @@ func (g *Graph) importDotBody(body string) {
 	}
 }
 
+func (g *Graph) ExportGraph(format string) {
+	switch format {
+	case "cell":
+		g.ExportCell()
+	case "dot":
+		g.ExportDot()
+	default:
+		die(fmt.Sprintf("import_graph: no export support for graph format '%s'", format))
+	}
+}
+
 func (g *Graph) ExportDot() string {
 	str := g.headerString("// ")
 
