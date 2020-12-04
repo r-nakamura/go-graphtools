@@ -1060,6 +1060,15 @@ func (g *Graph) CreateRandomRegularGraph(N, k int) {
 func (g *Graph) CreateLiMainiGraph() {
 }
 
+func (g *Graph) ImportGraph(format string, lines []string) {
+	switch format {
+	case "dot":
+		g.ImportDot(lines)
+	default:
+		die(fmt.Sprintf("import_graph: no import support for graph format '%s'", format))
+	}
+}
+
 func (g *Graph) ImportDot(lines []string) {
 	var buf string
 	for _, line := range lines {
