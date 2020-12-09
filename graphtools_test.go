@@ -481,6 +481,24 @@ func TestMaximalComponent(t *testing.T) {
 	}
 }
 
+func TestBetweenness(t *testing.T) {
+	var g UndirectedGraph
+	g.New()
+	g.AddVertices([]int{1, 2, 3, 4})
+	g.AddEdge(1, 2)
+	g.AddEdge(1, 3)
+	g.AddEdge(2, 3)
+	g.AddEdge(3, 4)
+
+	got := []float64{g.Betweenness(1), g.Betweenness(2), g.Betweenness(3), g.Betweenness(4)}
+	expected := []float64{0, 0, 4, 0}
+	for i := 0; i < 3; i++ {
+		if got[i] != expected[i] {
+			t.Errorf("got: %v, expected: %v", got[i], expected[i])
+		}
+	}
+}
+
 func TestCompleteGraph(t *testing.T) {
 	var g UndirectedGraph
 	g.New()
