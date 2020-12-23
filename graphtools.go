@@ -17,8 +17,8 @@ const (
 )
 
 const (
-	MAX_RETRIES = 100
-	INFINITY    = math.MaxFloat64
+	MaxRetries = 100
+	Infinity   = math.MaxFloat64
 )
 
 type Graph struct {
@@ -112,9 +112,8 @@ func (g *Graph) AverageDegree() float64 {
 	}
 	if len(V) > 0 {
 		return float64(d) / float64(len(V))
-	} else {
-		return 0
 	}
+	return 0
 }
 
 func (g *Graph) Vertices() []int {
@@ -128,9 +127,8 @@ func (g *Graph) Vertices() []int {
 func (g *Graph) HasVertex(v int) bool {
 	if _, ok := g.V[v]; ok {
 		return true
-	} else {
-		return false
 	}
+	return false
 }
 
 func (g *Graph) AddVertex(v int) {
@@ -240,7 +238,7 @@ func (g *Graph) Edges() [][2]int {
 	var found [][2]int
 	for u := range g.EO {
 		for v := range g.EO[u] {
-			for _ = range g.EO[u][v] {
+			for range g.EO[u][v] {
 				e := [2]int{u, v}
 				found = append(found, e)
 			}
@@ -291,9 +289,8 @@ func (g *Graph) EdgeCount(u, v int) int {
 	ids := g.MultiEdgeIDs(u, v)
 	if len(ids) > 0 {
 		return len(ids)
-	} else {
-		return 0
 	}
+	return 0
 }
 
 func (g *Graph) AddEdge(u, v int) {
@@ -472,7 +469,7 @@ func (g *Graph) Dijkstra(s int) (map[int]float64, map[int][]int) {
 			if _, ok := dist[u]; ok {
 				d = dist[u]
 			} else {
-				d = INFINITY
+				d = Infinity
 			}
 
 			if _, ok := dist[v]; !ok || dist[v] > d+w {
@@ -497,11 +494,11 @@ func sortByDist(V *[]int, dist map[int]float64) {
 		if _, ok := dist[v]; ok {
 			U[i] = T{v: v, d: dist[v]}
 		} else {
-			U[i] = T{v: v, d: INFINITY}
+			U[i] = T{v: v, d: Infinity}
 		}
 	}
 	sort.Slice(U, func(i, j int) bool { return U[i].d < U[j].d })
-	for i, _ := range *V {
+	for i := range *V {
 		(*V)[i] = U[i].v
 	}
 }
@@ -526,7 +523,7 @@ func (g *Graph) findPath(s, t int, P *[][]int, p []int) {
 				pp[i], pp[j] = pp[j], pp[i]
 			}
 			*P = append(*P, pp)
-			return
+			break
 		} else {
 			g.findPath(s, prev, P, pp)
 		}
@@ -558,9 +555,8 @@ func (g *Graph) FloydWarshall() {
 	get := func(path map[int]map[int]float64, u int, v int) float64 {
 		if _, ok := path[u][v]; ok {
 			return path[u][v]
-		} else {
-			return INFINITY
 		}
+		return Infinity
 	}
 	for _, k := range g.Vertices() {
 		for _, u := range g.Vertices() {
@@ -581,9 +577,8 @@ func (g *Graph) IsReachable(u, v int) bool {
 	}
 	if _, ok := g.T[u][v]; ok {
 		return true
-	} else {
-		return false
 	}
+	return false
 }
 
 func (g *Graph) Explore(s int) []int {
@@ -603,7 +598,7 @@ func (g *Graph) Explore(s int) []int {
 	}
 
 	V := []int{}
-	for v, _ := range explored {
+	for v := range explored {
 		V = append(V, v)
 	}
 	return V
@@ -623,7 +618,7 @@ func (g *Graph) Components() [][]int {
 	}
 	keys := func(m map[int]bool) []int {
 		var a []int
-		for v, _ := range m {
+		for v := range m {
 			a = append(a, v)
 		}
 		return a
@@ -745,7 +740,7 @@ func (g *Graph) CreateRandomGraph(N, E int) {
 	for i := 1; i < E-(N-1)+1; i++ {
 		ntries := 1
 		var u, v int
-		for ntries < MAX_RETRIES {
+		for ntries < MaxRetries {
 			u = rand.Intn(N) + 1
 			v = rand.Intn(N) + 1
 			if u != v {
@@ -773,7 +768,7 @@ func (g *Graph) CreateErdosRenyiGraph(N int, p float64) {
 	}
 }
 
-func (g *Graph) CreateRandomSparseGraph(N, E int, no_multiedge bool) {
+func (g *Graph) CreateRandomSparseGraph(N, E int, noMultiedge bool) {
 	for v := 1; v < N+1; v++ {
 		g.AddVertex(v)
 	}
@@ -781,13 +776,13 @@ func (g *Graph) CreateRandomSparseGraph(N, E int, no_multiedge bool) {
 	for i := 0; i < E; i++ {
 		ntries := 1
 		var u, v int
-		for ntries < MAX_RETRIES {
+		for ntries < MaxRetries {
 			u = rand.Intn(N) + 1
 			v = rand.Intn(N) + 1
-			if !no_multiedge && u != v {
+			if !noMultiedge && u != v {
 				break
 			}
-			if !no_multiedge && u != v && !g.HasEdge(u, v) {
+			if !noMultiedge && u != v && !g.HasEdge(u, v) {
 				break
 			}
 		}
@@ -951,12 +946,12 @@ func (g *Graph) CreateGeneralizedBarabasiGraph(N, m0, m int, gamma float64) {
 func (g *Graph) CreateLatentGraph(N, E int, errorRate float64, confer, dist string, alpha float64) {
 }
 
-func (g *Graph) CreateLatticeGraph(dim, n int, is_torus bool) {
+func (g *Graph) CreateLatticeGraph(dim, n int, isTorus bool) {
 	if dim == 1 {
 		for i := 1; i < n+1; i++ {
 			u := latticeVertex(dim, n, i)
 			v := latticeVertex(dim, n, i+1)
-			if is_torus || v > u {
+			if isTorus || v > u {
 				g.AddEdge(u, v)
 			}
 		}
@@ -965,11 +960,11 @@ func (g *Graph) CreateLatticeGraph(dim, n int, is_torus bool) {
 			for i := 1; i < n+1; i++ {
 				u := latticeVertex(dim, n, i, j)
 				v := latticeVertex(dim, n, i+1, j)
-				if is_torus || v > u {
+				if isTorus || v > u {
 					g.AddEdge(u, v)
 				}
 				v = latticeVertex(dim, n, i, j+1)
-				if is_torus || v > u {
+				if isTorus || v > u {
 					g.AddEdge(u, v)
 				}
 			}
@@ -1009,7 +1004,7 @@ func (g *Graph) CreateDegreeBoundedGraph(N, E int) {
 
 	randomChoice := func (m map[int]bool) int {
 		var V []int
-		for v, _ := range m {
+		for v := range m {
 			V = append(V, v)
 		}
 		return V[rand.Intn(len(V))]
@@ -1049,13 +1044,12 @@ func (g *Graph) CreateConfigurationGraph(degreeSeq []int) {
 	}
 }
 
-func (g *Graph) ConnectRandomly(N int, stubs_ []int) bool {
+func (g *Graph) ConnectRandomly(N int, stubs []int) bool {
 	g.New()
 	for v := 1; v < N+1; v++ {
 		g.AddVertex(v)
 	}
 
-	stubs := stubs_
 	rand.Shuffle(len(stubs), func(i, j int) { stubs[i], stubs[j] = stubs[j], stubs[i] })
 	for len(stubs) > 0 {
 		u := stubs[0]
@@ -1214,9 +1208,8 @@ func (g *Graph) ExportDot() string {
 	sort.Slice(E, func(i, j int) bool {
 		if E[i][0] != E[j][0] {
 			return E[i][0] < E[j][0]
-		} else {
-			return E[i][1] < E[j][1]
 		}
+		return E[i][1] < E[j][1]
 	})
 	for _, e := range E {
 		u, v := e[0], e[1]

@@ -14,9 +14,8 @@ func sortEdges(E *[][2]int) {
 	sort.Slice(*E, func(i, j int) bool {
 		if (*E)[i][0] != (*E)[j][0] {
 			return (*E)[i][0] < (*E)[j][0]
-		} else {
-			return (*E)[i][1] < (*E)[j][1]
 		}
+		return (*E)[i][1] < (*E)[j][1]
 	})
 }
 
